@@ -1,6 +1,15 @@
 <?php
 
+use App\Http\Controllers\SlotController;
+use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\PesertaController;
+use App\Http\Controllers\mataPelajaranController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\LatihanController;
+use App\Http\Controllers\pengenalanController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +61,46 @@ Route::get('/biodata/{nama}/{umur}/{alamat}/{jeniskelamin}/{kelas}/{hobby}', fun
 });
 
 // Route Opsional Parameter
-Route::get('/pesanan/{makanan?}', function ($a = 'Mohon Maaf Pesanan Anda Tidak Ada') {
-    return view('pages.pesanan' , compact ('a'));
+Route::get('/pesanan/{makanan?}/{makanan1?}', function ($a , $b ,$c= 'Mohon Maaf Pesanan Anda Tidak Ada') {
+    return view('pages.pesanan' , compact ('a','b' , 'c'));
 });
+
+// passing data dari Controller ke view 
+Route::get('/pengenalan' , [App\Http\Controllers\pengenalanController::class, 'Pengenalan']);
+
+// passing data dinamis (route parameter) dari controller ke view
+// 'intro' disini merupakan nama dari function yang kita buat di views/pages/pengenalan.blade.php
+// dalam memanggil passing data ada dua cara yaitu 1.[App\Http\Controllers\pengenalanController::class, 'intro']
+// atau dapat juga 2. langsung nama controllernya  [pengenalanController::class, 'siswa']
+Route::get('/intro/{nama}/{alamat}/{umur}', [App\Http\Controllers\pengenalanController::class, 'intro']);
+
+Route::get('/siswa', [App\Http\Controllers\pengenalanController::class, 'siswa']);
+
+Route::get('/menu', [App\Http\Controllers\LatihanController::class, 'menu']);
+Route::get('/dosen', [App\Http\Controllers\LatihanController::class, 'dosen']);
+Route::get('/stasiuntv', [App\Http\Controllers\LatihanController::class, 'stasiuntv']);
+
+// menampilkan data database ke view
+Route::get('/post', [App\Http\Controllers\PostController::class, 'index']);
+
+Route::get('/siswapost', [App\Http\Controllers\SiswaController::class, 'siswa']);
+ Route::get('/peserta', [App\Http\Controllers\PesertaController::class, 'peserta']);
+ Route::get('/mapel', [App\Http\Controllers\mataPelajaranController::class, 'mataPelajaran']);
+
+ Route::get('/transaksi', [App\Http\Controllers\TransaksiController::class, 'pengunjung']);
+Auth::routes();
+
+// Route::resource('slot', SlotController::class);
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Menampilkan data database CRUD
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+Route::resource('slot', SlotController::class);
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
